@@ -1,1 +1,31 @@
 
+---
+- name: "Instaling Apache, PHP"
+  yum:
+    name:
+      - httpd
+      - php
+    state: present
+
+- name: "Restarting/Enabling Apache service"
+  service:
+    name: httpd
+    state: restarted
+    enabled: true
+
+- name: "Downloading website file"
+  get_url:
+    dest: /tmp/
+    url: https://www.tooplate.com/zip-templates/2127_little_fashion.zip
+- name: "Extracting files"
+  unarchive:
+    remote_src: yes
+    src: /tmp/2127_little_fashion.zip
+    dest: /tmp/
+- name: "Copying files to docroot"
+  copy:
+    remote_src: yes
+    src: /tmp/2127_little_fashion/
+    dest: /var/www/html/
+    owner: apache
+    group: apache
